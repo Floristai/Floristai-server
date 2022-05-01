@@ -10,7 +10,7 @@ namespace Floristai.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFlower()
         {
-            DtoFlower flower = new DtoFlower() { Name = "AA", ID = 1};
+            DtoFlower flower = new DtoFlower() { Name = "AA", Id = 1};
             return Ok(flower);
         }
     }

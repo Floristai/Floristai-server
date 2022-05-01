@@ -14,6 +14,7 @@ builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(build
 builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddSwaggerGen();
+builder.Services.TryAddSingleton<IJwtKeyHoldingService>(new JwtKeyHoldingService() { JwtTokenKey = builder.Configuration.GetValue<string>("JwtTokenKey:Key") });
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IUserIdService, UserIdService>();

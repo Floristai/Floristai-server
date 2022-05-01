@@ -12,10 +12,10 @@ namespace Floristai.Services
         private readonly string key;
         private readonly IUserRepository _userRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IJwtKeyHoldingService jwtKeyHoldingService)
         {
             _userRepository = userRepository;
-            this.key = "aaaa[aa]aa[aa]aa";
+            this.key = jwtKeyHoldingService.JwtTokenKey;
         }
         public async Task<bool> RegisterUser(string email, string password)
         {
