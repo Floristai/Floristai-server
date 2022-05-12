@@ -27,5 +27,15 @@ namespace Floristai.Repositories
             DtoUser user = _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefault();
             return user.Id;
         }
+
+        public async Task<DtoUser> GetUser(string email, string passwordHash)
+        {
+            if (!_dbContext.Users.Any(u => u.Email == email && passwordHash == u.Password))
+            {
+                return null;
+            }
+            DtoUser user = _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefault();
+            return user;
+        }
     }
 }

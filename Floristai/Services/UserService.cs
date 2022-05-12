@@ -1,4 +1,5 @@
-﻿using Floristai.Repositories;
+﻿using Floristai.Entities;
+using Floristai.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -29,12 +30,14 @@ namespace Floristai.Services
 
         public async Task<string> AuthenticateUser(string email, string password)
         {
-            int userID = _userRepository.GetUserId(email, getPasswordHash(password));
-            if (userID == 0) return null;
+            DtoUser user = await _userRepository.GetUser(email, getPasswordHash(password));
+            if (user == null) return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(key);
-            Claim[] claims = new Claim[] { new Claim(ClaimTypes.NameIdentifier, userID.ToString()) };
+            string claimType = (user.Type == "Administrator" ? "Administrator" : ClaimTypes.NameIdentifier);
+
+            Claim[] claims = new Claim[] { new Claim(claimType, user.Id.ToString()) };
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),

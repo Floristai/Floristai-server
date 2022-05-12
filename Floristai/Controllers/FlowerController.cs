@@ -1,4 +1,5 @@
 ﻿using Floristai.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Floristai.Controllers
@@ -11,6 +12,14 @@ namespace Floristai.Controllers
         public async Task<IActionResult> GetFlower()
         {
             DtoFlower flower = new DtoFlower() { Name = "AA", Id = 1};
+            return Ok(flower);
+        }
+
+        [HttpGet("secret")]
+        [Authorize(Policy = "AdministratorOnly")]
+        public async Task<IActionResult> GetAdminlower()
+        {
+            DtoFlower flower = new DtoFlower() { Name = "Administrator flower", Id = 1 };
             return Ok(flower);
         }
     }

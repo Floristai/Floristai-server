@@ -6,5 +6,6 @@ namespace Floristai.Repositories
     {
         int GetUserId(string email, string password);
         Task<DtoUser> InsertUser(string email, string password);
+        Task<DtoUser> GetUser(string email, string password);
     }
 }
