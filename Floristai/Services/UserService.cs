@@ -38,7 +38,7 @@ namespace Floristai.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(key);
-            string claimType = (user.Type == "Administrator" ? "Administrator" : ClaimTypes.NameIdentifier);
+            string claimType = (user.Type == "Administrator" ? CustomClaimTypes.Administrator : ClaimTypes.NameIdentifier);
 
             Claim[] claims = new Claim[] { new Claim(claimType, user.Email.ToString()) };
             var tokenDescriptor = new SecurityTokenDescriptor

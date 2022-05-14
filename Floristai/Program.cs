@@ -1,8 +1,10 @@
 using Floristai;
 using Floristai.EFContexts;
+using Floristai.Models;
 using Floristai.Repositories;
 using Floristai.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +18,8 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.TryAddSingleton<IJwtKeyHoldingService>(new JwtKeyHoldingService() { JwtTokenKey = builder.Configuration.GetValue<string>("JwtTokenKey:Key") });
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IFlowerRepository, FlowerRepository>();
+builder.Services.AddScoped<IFlowerService, FlowerService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(x =>
 {
@@ -32,13 +36,16 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false
     };
 });
-//builder.Services.AddAuthorization(options => 
-//{ 
-//    options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Administrator")); 
-//});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.AdministratorOnly, policy => policy.RequireClaim(CustomClaimTypes.Administrator));
+});
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers().AddOData(options => options.Select().Filter());
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -51,7 +58,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
-{
+{ 
     endpoints.MapControllers();
 });
 
