@@ -1,5 +1,7 @@
-﻿using Floristai.EFContexts;
+﻿using AutoMapper;
+using Floristai.EFContexts;
 using Floristai.Entities;
+using Floristai.Models;
 
 namespace Floristai.Repositories
 {
@@ -11,31 +13,31 @@ namespace Floristai.Repositories
             this._dbContext = dbContext;
         }
 
-        public async Task<DtoUser> InsertUser(string email, string passwordHash)
+        public async Task<User> InsertUser(User user)
         {
-            var insertedResult = _dbContext.Users.Add(new DtoUser() { Email = email, Password = passwordHash });
+            var insertedResult = _dbContext.Users.Add(new UserEntity() { Email = user.Email, Password = user.Password, Type = user.Type});
             await _dbContext.SaveChangesAsync();
-            return insertedResult.Entity;
+            return user;
         }
 
-        public int GetUserId(string email, string passwordHash)
-        {
-            if (!_dbContext.Users.Any(u => u.Email == email && passwordHash == u.Password))
-            {
-                return 0;
-            }
-            DtoUser user = _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefault();
-            return user.Id;
-        }
-
-        public async Task<DtoUser> GetUser(string email, string passwordHash)
+        public async Task<User> GetUser(string email, string passwordHash)
         {
             if (!_dbContext.Users.Any(u => u.Email == email && passwordHash == u.Password))
             {
                 return null;
             }
-            DtoUser user = _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefault();
-            return user;
+            UserEntity userEntity = _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefault();
+            return mapEntityToModel(userEntity);
+        }
+
+        private User mapEntityToModel(UserEntity entity)
+        {
+            var config = new MapperConfiguration(cfg =>
+                    cfg.CreateMap<UserEntity, User>()
+                );
+            var mapper = new Mapper(config);
+            var user = mapper.Map<User>(entity);
+            return user; 
         }
     }
 }

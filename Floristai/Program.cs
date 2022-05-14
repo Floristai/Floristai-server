@@ -17,7 +17,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.TryAddSingleton<IJwtKeyHoldingService>(new JwtKeyHoldingService() { JwtTokenKey = builder.Configuration.GetValue<string>("JwtTokenKey:Key") });
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -33,10 +32,11 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false
     };
 });
-builder.Services.AddAuthorization(options => 
-{ 
-    options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Administrator")); 
-});
+//builder.Services.AddAuthorization(options => 
+//{ 
+//    options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Administrator")); 
+//});
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -48,12 +48,13 @@ if (app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 app.Run();
 
