@@ -1,6 +1,10 @@
 ﻿using Floristai.Entities;
+using Floristai.Models;
+using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using System.Security.Claims;
 
 namespace Floristai.Controllers
 {
@@ -8,19 +12,33 @@ namespace Floristai.Controllers
     [ApiController]
     public class FlowerController : ControllerBase
     {
+        private readonly IFlowerService _flowerService;
+        public FlowerController(IFlowerService flowerService)
+        {
+            _flowerService = flowerService;
+        }
         [HttpGet]
         public async Task<IActionResult> GetFlower()
         {
-            DtoFlower flower = new DtoFlower() { Name = "AA", Id = 1};
+            FlowerEntity flower = new FlowerEntity() { Name = "AA", Id = 1};
             return Ok(flower);
         }
 
         [HttpGet("secret")]
-        [Authorize(Policy = "AdministratorOnly")]
+        [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> GetAdminlower()
         {
-            DtoFlower flower = new DtoFlower() { Name = "Administrator flower", Id = 1 };
+            FlowerEntity flower = new FlowerEntity() { Name = "Administrator flower", Id = 1 };
             return Ok(flower);
+        }
+
+        [HttpGet("filter")]
+        [AllowAnonymous]
+        [EnableQuery]
+        public async Task<IActionResult> GetFiltered()
+        {
+            var response = await _flowerService.getAll();
+            return Ok(response);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Floristai.Entities;
+using Floristai.Models;
 using Floristai.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,9 +21,11 @@ namespace Floristai.Services
         }
         public async Task<bool> RegisterUser(string email, string password)
         {
-            if (_userRepository.GetUserId(email, password) == 0)
+            User user = await _userRepository.GetUser(email, password);
+            if (user == null)
             {
-                await _userRepository.InsertUser(email, getPasswordHash(password));
+                User toInsert = new User { Type = "Client", Email = email, Password = password }; //getPasswordHash(password)
+                await _userRepository.InsertUser(toInsert);
                 return true;
             }
             return false;
@@ -30,14 +33,14 @@ namespace Floristai.Services
 
         public async Task<string> AuthenticateUser(string email, string password)
         {
-            DtoUser user = await _userRepository.GetUser(email, getPasswordHash(password));
+            User user = await _userRepository.GetUser(email, password); //getPasswordHash(password)
             if (user == null) return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(key);
-            string claimType = (user.Type == "Administrator" ? "Administrator" : ClaimTypes.NameIdentifier);
+            string claimType = (user.Type == "Administrator" ? CustomClaimTypes.Administrator : ClaimTypes.NameIdentifier);
 
-            Claim[] claims = new Claim[] { new Claim(claimType, user.Id.ToString()) };
+            Claim[] claims = new Claim[] { new Claim(claimType, user.Email.ToString()) };
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),

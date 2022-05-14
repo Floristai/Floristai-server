@@ -18,7 +18,7 @@ namespace Floristai.Migrations
                 .HasAnnotation("ProductVersion", "6.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Floristai.Entities.DtoFlower", b =>
+            modelBuilder.Entity("Floristai.Entities.FlowerEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,7 +33,7 @@ namespace Floristai.Migrations
                     b.ToTable("Flowers");
                 });
 
-            modelBuilder.Entity("Floristai.Entities.DtoUser", b =>
+            modelBuilder.Entity("Floristai.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

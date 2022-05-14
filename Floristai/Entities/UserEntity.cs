@@ -1,6 +1,6 @@
 ﻿namespace Floristai.Entities
 {
-    public class DtoUser
+    public class UserEntity
     {
         public int Id { get; set; }
         public string Email { get; set; }
