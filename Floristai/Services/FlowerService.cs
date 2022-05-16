@@ -12,9 +12,9 @@ namespace Floristai.Services
             _flowerRepository = flowerRepository;
         }
 
-        public async Task<List<Flower>> getAll()
+        public async Task<List<Flower>> GetAll()
         {
-            return await _flowerRepository.getAll();
+            return await _flowerRepository.GetAll();
         }
     }
 }

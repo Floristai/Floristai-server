@@ -2,25 +2,28 @@
 using Floristai.EFContexts;
 using Floristai.Entities;
 using Floristai.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Floristai.Repositories
 {
     public class FlowerRepository : IFlowerRepository
     {
         private readonly DatabaseContext _dbContext;
-        private Mapper entityToModelMapper;
+        private readonly Mapper _entityToModelMapper;
+
         public FlowerRepository(DatabaseContext dbContext)
         {
             this._dbContext = dbContext;
             var config = new MapperConfiguration(cfg =>
                     cfg.CreateMap<FlowerEntity, Flower>()
                 );
-            this.entityToModelMapper = new Mapper(config);
+            this._entityToModelMapper = new Mapper(config);
         }
 
-        public async Task<List<Flower>> getAll()
+        public async Task<List<Flower>> GetAll()
         {
-            return entityToModelMapper.Map<List<FlowerEntity>, List<Flower>>(_dbContext.Flowers.ToList());
+            var flowers = await _dbContext.Flowers.ToListAsync();
+            return _entityToModelMapper.Map<List<FlowerEntity>, List<Flower>>(flowers);
         }
     }
 }
