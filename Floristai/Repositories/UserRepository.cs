@@ -2,15 +2,17 @@
 using Floristai.EFContexts;
 using Floristai.Entities;
 using Floristai.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Floristai.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly DatabaseContext _dbContext;
+
         public UserRepository(DatabaseContext dbContext)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public async Task<User> InsertUser(User user)
@@ -22,15 +24,16 @@ namespace Floristai.Repositories
 
         public async Task<User> GetUser(string email, string passwordHash)
         {
-            if (!_dbContext.Users.Any(u => u.Email == email && passwordHash == u.Password))
+            var userExists = await _dbContext.Users.AnyAsync(u => u.Email == email && passwordHash == u.Password);
+            if (!userExists)
             {
                 return null;
             }
-            UserEntity userEntity = _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefault();
-            return mapEntityToModel(userEntity);
+            UserEntity userEntity = await _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
+            return MapEntityToModel(userEntity);
         }
 
-        private User mapEntityToModel(UserEntity entity)
+        private User MapEntityToModel(UserEntity entity)
         {
             var config = new MapperConfiguration(cfg =>
                     cfg.CreateMap<UserEntity, User>()

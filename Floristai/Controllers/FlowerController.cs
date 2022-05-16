@@ -17,6 +17,7 @@ namespace Floristai.Controllers
         {
             _flowerService = flowerService;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetFlower()
         {
@@ -26,7 +27,7 @@ namespace Floristai.Controllers
 
         [HttpGet("secret")]
         [Authorize(Policy = Policies.AdministratorOnly)]
-        public async Task<IActionResult> GetAdminlower()
+        public async Task<IActionResult> GetAdminFlower()
         {
             FlowerEntity flower = new FlowerEntity() { Name = "Administrator flower", Id = 1 };
             return Ok(flower);
@@ -37,7 +38,7 @@ namespace Floristai.Controllers
         [EnableQuery]
         public async Task<IActionResult> GetFiltered()
         {
-            var response = await _flowerService.getAll();
+            var response = await _flowerService.GetAll();
             return Ok(response);
         }
     }

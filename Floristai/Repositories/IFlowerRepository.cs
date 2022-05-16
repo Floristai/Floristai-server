@@ -4,6 +4,6 @@ namespace Floristai.Repositories
 {
     public interface IFlowerRepository
     {
-        Task<List<Flower>> getAll();
+        Task<List<Flower>> GetAll();
     }
 }

@@ -11,14 +11,15 @@ namespace Floristai.Services
 {
     public class UserService : IUserService
     {
-        private readonly string key;
+        private readonly string _key;
         private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository userRepository, IJwtKeyHoldingService jwtKeyHoldingService)
         {
             _userRepository = userRepository;
-            this.key = jwtKeyHoldingService.JwtTokenKey;
+            _key = jwtKeyHoldingService.JwtTokenKey;
         }
+
         public async Task<bool> RegisterUser(string email, string password)
         {
             User user = await _userRepository.GetUser(email, password);
@@ -37,7 +38,7 @@ namespace Floristai.Services
             if (user == null) return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.ASCII.GetBytes(key);
+            var tokenKey = Encoding.ASCII.GetBytes(_key);
             string claimType = (user.Type == "Administrator" ? CustomClaimTypes.Administrator : ClaimTypes.NameIdentifier);
 
             Claim[] claims = new Claim[] { new Claim(claimType, user.Email.ToString()) };
@@ -52,7 +53,7 @@ namespace Floristai.Services
             return tokenHandler.WriteToken(token);
         }
 
-        private string getPasswordHash(string password)
+        private string GetPasswordHash(string password)
         {
             using (SHA256 sha256Hash = SHA256.Create())
             {
@@ -66,7 +67,6 @@ namespace Floristai.Services
                 return builder.ToString();
             }
         }
-
        
     }
 }
