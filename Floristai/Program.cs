@@ -44,6 +44,13 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddControllers().AddOData(options => options.Select().Filter());
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy => {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 
@@ -55,6 +62,7 @@ if (app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
