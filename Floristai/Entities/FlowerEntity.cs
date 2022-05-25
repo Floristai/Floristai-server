@@ -2,7 +2,7 @@
 {
     public class FlowerEntity
     {
-        public int Id { get; set; }
+        public int FlowerId { get; set; }
         public string Name { get; set; }
     }
 }
