@@ -3,6 +3,6 @@
     public class Flower
     {
         public string Name { get; set; }
-        public decimal Price { get; set; } = 5;
+        public decimal Price { get; set; }
     }
 }

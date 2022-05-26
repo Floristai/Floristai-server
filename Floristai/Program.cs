@@ -20,6 +20,9 @@ builder.Services.TryAddSingleton<IJwtKeyHoldingService>(new JwtKeyHoldingService
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFlowerRepository, FlowerRepository>();
 builder.Services.AddScoped<IFlowerService, FlowerService>();
+builder.Services.AddScoped<IUserIdService, UserIdService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(x =>
 {

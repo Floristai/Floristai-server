@@ -67,6 +67,5 @@ namespace Floristai.Services
                 return builder.ToString();
             }
         }
-       
     }
 }

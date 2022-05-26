@@ -13,7 +13,7 @@ namespace Floristai.Entities
 
         public int Quantity { get; set; }
 
-        public int FlowerId { get; set; }
+        public FlowerEntity Flower { get; set; }
 
     }
 }

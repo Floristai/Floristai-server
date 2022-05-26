@@ -16,6 +16,6 @@ namespace Floristai.Entities
         [ForeignKey("OrderId")]
         public ICollection<OrderLineEntity> OrderLines { get; set; }
 
-
+      
     }
 }
