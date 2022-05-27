@@ -13,11 +13,11 @@ namespace Floristai.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IUserIdService _userIdService;
+        private readonly IUserService _userService;
         private readonly IOrderService _orderService;
-        public OrderController(IUserIdService userIdService, IOrderService orderService)
+        public OrderController(IUserService userService, IOrderService orderService)
         {
-            _userIdService = userIdService;
+            _userService = userService;
             _orderService = orderService;
         }
 
@@ -25,7 +25,7 @@ namespace Floristai.Controllers
         [Authorize]
         public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
         {
-            var result = await _orderService.InsertNewOrder(orderDto, _userIdService.GetUserID());  
+            var result = await _orderService.InsertNewOrder(orderDto, _userService.getCurrentUserId());  
             try
             { 
                 return Ok(result);
@@ -40,7 +40,7 @@ namespace Floristai.Controllers
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _orderService.GetUserOrders(_userIdService.GetUserID());
+            var response = await _orderService.GetUserOrders(_userService.getCurrentUserId());
             return Ok(response);
         }
 

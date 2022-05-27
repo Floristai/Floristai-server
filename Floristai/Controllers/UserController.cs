@@ -14,11 +14,9 @@ namespace Floristai.Controllers
     [ApiController]
     public class UserController : ControllerBase{ 
         private readonly IUserService _userService;
-        private readonly IUserIdService _userIdService;
-        public UserController(IUserService userManager, IUserIdService userIdService)
+        public UserController(IUserService userService)
         {
-            _userService = userManager;
-            _userIdService = userIdService;
+            _userService = userService;
         }
 
         [HttpPost("login")]
@@ -46,7 +44,7 @@ namespace Floristai.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var current = await _userService.GetCurrentUser(_userIdService.GetUserID());
+            var current = await _userService.GetCurrentUser();
             return Ok(current);
         }
         //user gavimas

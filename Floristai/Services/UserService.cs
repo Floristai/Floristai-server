@@ -16,12 +16,14 @@ namespace Floristai.Services
         private readonly string _key;
         private readonly IUserRepository _userRepository;
         private readonly Mapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IUserRepository userRepository, IJwtKeyHoldingService jwtKeyHoldingService, Mapper mapper)
+        public UserService(IUserRepository userRepository, IJwtKeyHoldingService jwtKeyHoldingService, Mapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _userRepository = userRepository;
             _key = jwtKeyHoldingService.JwtTokenKey;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<bool> RegisterUser(string email, string password)
@@ -74,10 +76,18 @@ namespace Floristai.Services
             }
         }
 
-        public async Task<UserDto> GetCurrentUser(int userId)
+
+        public async Task<UserDto> GetCurrentUser()
         {
-            var user = await _userRepository.GetUserById(userId);
+            var user = await _userRepository.GetUserById(this.getCurrentUserId());
             return _mapper.Map<UserDto>(user);
+        }
+
+        public int getCurrentUserId()
+        {
+            var x = _httpContextAccessor.HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier || c.Type == CustomClaimTypes.Administrator);
+            return int.Parse(x.Value);
         }
     }
 }
