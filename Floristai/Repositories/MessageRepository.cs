@@ -29,7 +29,7 @@ namespace Floristai.Repositories
 
         public async Task<Message> GetMessageById(int id)
         {
-            var message = _dbContext.Messages.FindAsync(id);
+            var message = await _dbContext.Messages.FindAsync(id);
             return _entityToModelMapper.Map<Message>(message);
         }
 
