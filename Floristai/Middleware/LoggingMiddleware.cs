@@ -25,9 +25,8 @@ namespace Floristai.Middleware
             {
                 var id = _userService.getCurrentUserId();
                 var user = _userService.GetCurrentUser();
-                Console.WriteLine(id);
-                Console.WriteLine(user);
-                //var registered = await _loggingService.AddNewLogging(id.ToString(), user.ToString(), endpoint.ToString() );
+                
+                var registered = await _loggingService.AddNewLogging(id.ToString(), user.ToString(), endpoint.ToString() );
             }
         }
     }
