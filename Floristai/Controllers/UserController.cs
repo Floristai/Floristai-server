@@ -16,7 +16,8 @@ namespace Floristai.Controllers
 
     [Route("[controller]")]
     [ApiController]
-    public class UserController : ControllerBase{ 
+    public class UserController : ControllerBase
+    {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly EmailDetails _emailDetails;
@@ -46,13 +47,13 @@ namespace Floristai.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AttemptRegister([FromBody] UserLoginData values)
         {
-            var registrationEmail = new RegistrationEmail(values.Email);
-
-            await _emailService.SendEmail(registrationEmail, _emailDetails);
             var registered = await _userService.RegisterUser(values.Email, values.Password);
-            if (registered)
-                return Ok();
-            return BadRequest("Could not Register");
+            if (!registered)
+                return BadRequest("Could not Register");
+
+            var registrationEmail = new RegistrationEmail(values.Email);
+            await _emailService.SendEmail(registrationEmail, _emailDetails);
+            return Ok();
         }
 
         [HttpGet("current")]
