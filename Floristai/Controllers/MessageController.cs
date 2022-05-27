@@ -24,7 +24,7 @@ namespace Floristai.Controllers
             return Ok(_message);
         }
 
-        [HttpGet]
+        [HttpGet("user")]
         [Authorize]
         public async Task<IActionResult> GetMessagesByUser([FromQuery] int userId)
         {
@@ -32,7 +32,7 @@ namespace Floristai.Controllers
             return Ok(messages);
         }
 
-        [HttpGet]
+        [HttpGet("sender")]
         [Authorize]
         public async Task<IActionResult> GetMessagesBySender([FromQuery] int senderId)
         {
