@@ -13,7 +13,7 @@ namespace Floristai.EFContexts
 
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<OrderLineEntity> OrderLines { get; set; }
-
+        public DbSet<LoggingEntity> Logging { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
     }
 }
