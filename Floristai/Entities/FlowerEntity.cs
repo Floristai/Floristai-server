@@ -13,5 +13,7 @@ namespace Floristai.Entities
         public string Occasion { get; set; }
         public string Description { get; set; }
         public int Quantity { get; set; }
+        [Timestamp]
+        public byte[] Version { get; set; }
     }
 }
