@@ -67,5 +67,9 @@ namespace Floristai.Services
                 return builder.ToString();
             }
         }
+        public async Task<string> GetUserEmail(int userId)
+        {
+            return await _userRepository.GetUserEmail(userId);
+        }
     }
 }

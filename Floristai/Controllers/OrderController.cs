@@ -55,7 +55,5 @@ namespace Floristai.Controllers
             var response = await _orderService.CompleteOrder(orderId);
             return Ok(response);
         }
-
-
     }
 }

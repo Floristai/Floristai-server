@@ -41,6 +41,7 @@ builder.Services.AddScoped<IFlowerService, FlowerService>();
 builder.Services.AddScoped<IUserIdService, UserIdService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(x =>
 {

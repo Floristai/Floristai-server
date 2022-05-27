@@ -48,5 +48,10 @@ namespace Floristai.Repositories
             var response = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             return response.UserId;
         }
+        public async Task<string> GetUserEmail(int userId)
+        {
+            var response = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            return response.Email;
+        }
     }
 }

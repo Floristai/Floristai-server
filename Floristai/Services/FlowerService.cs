@@ -16,5 +16,10 @@ namespace Floristai.Services
         {
             return await _flowerRepository.GetAll();
         }
+
+        public async Task<List<Flower>> GetByIds(List<int> ids)
+        {
+            return await _flowerRepository.GetByIds(ids);
+        }
     }
 }
