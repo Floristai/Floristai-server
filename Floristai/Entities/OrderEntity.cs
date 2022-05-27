@@ -11,6 +11,7 @@ namespace Floristai.Entities
 
         [ForeignKey("UserId")]
         public int ClientId { get; set; }
+        public string DeliveryAddress { get; set; }
         public DateTime DateCreated { get; set; }
         public string Status { get; set; }
         [ForeignKey("OrderId")]
