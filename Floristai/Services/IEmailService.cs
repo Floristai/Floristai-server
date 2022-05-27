@@ -1,7 +1,9 @@
-﻿namespace Floristai.Services
+﻿using Floristai.Models;
+
+namespace Floristai.Services
 {
     public interface IEmailService
     {
-        Task SendEmail(IEmail email);
+        Task SendEmail(IEmail email, EmailDetails emailDetails);
     }
 }
