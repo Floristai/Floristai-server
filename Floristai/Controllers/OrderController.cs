@@ -1,5 +1,6 @@
 ﻿using Floristai.Dto;
 using Floristai.Entities;
+using Floristai.Middleware;
 using Floristai.Models;
 using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +23,7 @@ namespace Floristai.Controllers
         }
 
         [HttpPost]
+        [Logging]
         [Authorize]
         public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
         {
@@ -37,6 +39,7 @@ namespace Floristai.Controllers
         }
 
         [HttpGet]
+        [Logging]
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
@@ -44,6 +47,7 @@ namespace Floristai.Controllers
             return Ok(response);
         }
 
+        [Logging]
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpPut("{orderId}/confirm")]
         public async Task<IActionResult> ConfirmOrder([FromRoute] int orderId)
@@ -51,7 +55,8 @@ namespace Floristai.Controllers
             var response = await _orderService.ConfirmOrder(orderId);
             return Ok(response);
         }
-        
+
+        [Logging]
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpPut("{orderId}/complete")]
         public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
