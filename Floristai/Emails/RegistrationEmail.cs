@@ -1,4 +1,4 @@
-﻿namespace Floristai.Services
+﻿namespace Floristai.Emails
 {
     public class RegistrationEmail : IEmail
     {

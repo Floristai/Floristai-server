@@ -1,4 +1,5 @@
-﻿using Floristai.Models;
+﻿using Floristai.Emails;
+using Floristai.Models;
 using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

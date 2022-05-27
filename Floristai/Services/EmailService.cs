@@ -1,4 +1,5 @@
 ﻿using Floristai.Models;
+using Floristai.Emails;
 using System.Net;
 using System.Net.Mail;
 
