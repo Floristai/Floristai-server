@@ -1,4 +1,6 @@
-﻿using Floristai.Entities;
+﻿using AutoMapper;
+using Floristai.Dto;
+using Floristai.Entities;
 using Floristai.Models;
 using Floristai.Repositories;
 using Microsoft.IdentityModel.Tokens;
@@ -13,16 +15,21 @@ namespace Floristai.Services
     {
         private readonly string _key;
         private readonly IUserRepository _userRepository;
+        private readonly Mapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IUserRepository userRepository, IJwtKeyHoldingService jwtKeyHoldingService)
+        public UserService(IUserRepository userRepository, IJwtKeyHoldingService jwtKeyHoldingService, Mapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _userRepository = userRepository;
             _key = jwtKeyHoldingService.JwtTokenKey;
+            _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<bool> RegisterUser(string email, string password)
         {
-            User user = await _userRepository.GetUser(email, password);
+            var passwordHash = GetPasswordHash(password);
+            User user = await _userRepository.GetUserByEmailAndPassword(email, password);
             if (user == null)
             {
                 User toInsert = new User { Type = "Client", Email = email, Password = password }; //getPasswordHash(password)
@@ -34,14 +41,15 @@ namespace Floristai.Services
 
         public async Task<string> AuthenticateUser(string email, string password)
         {
-            User user = await _userRepository.GetUser(email, password); //getPasswordHash(password)
+            var passwordHash = GetPasswordHash(password);
+            User user = await _userRepository.GetUserByEmailAndPassword(email, password); //getPasswordHash(password)
             if (user == null) return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_key);
             string claimType = (user.Type == "Administrator" ? CustomClaimTypes.Administrator : ClaimTypes.NameIdentifier);
 
-            Claim[] claims = new Claim[] { new Claim(claimType, user.Email.ToString()) };
+            Claim[] claims = new Claim[] { new Claim(claimType, user.UserId.ToString(), user.Email) };
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -66,6 +74,20 @@ namespace Floristai.Services
                 }
                 return builder.ToString();
             }
+        }
+
+
+        public async Task<UserDto> GetCurrentUser()
+        {
+            var user = await _userRepository.GetUserById(this.getCurrentUserId());
+            return _mapper.Map<UserDto>(user);
+        }
+
+        public int getCurrentUserId()
+        {
+            var x = _httpContextAccessor.HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier || c.Type == CustomClaimTypes.Administrator);
+            return int.Parse(x.Value);
         }
     }
 }
