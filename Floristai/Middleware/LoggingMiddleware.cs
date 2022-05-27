@@ -22,10 +22,11 @@ namespace Floristai.Middleware
 
             var endpoint = context.Features.Get<IEndpointFeature>()?.Endpoint;
             var attribute = endpoint?.Metadata.GetMetadata<LoggingAttribute>();
+            var id = _userIdService.GetUserID();
             if (attribute != null)
             {
                 var ev = attribute.Event;
-                var registered = await _loggingService.AddNewLogging(_userIdService.GetUserID().ToString(), context.User.Claims.ToString(), endpoint.ToString() );
+                var registered = await _loggingService.AddNewLogging(id.ToString(), _userIdService.GetUserClaims(id).ToString(), endpoint.ToString() );
             }
         }
     }

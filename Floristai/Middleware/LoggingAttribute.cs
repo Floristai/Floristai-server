@@ -11,5 +11,5 @@
         }
     }
 
-    public enum LoggingEvent { Login }
+    public enum LoggingEvent { Create, Confirm, Complete }
 }
