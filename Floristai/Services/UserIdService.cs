@@ -1,4 +1,5 @@
 ﻿using Floristai.Repositories;
+using Floristai.Models;
 using System.Security.Claims;
 
 namespace Floristai.Services
@@ -15,8 +16,9 @@ namespace Floristai.Services
 
         public int GetUserID()
         {
-            return int.Parse(_httpContextAccessor.HttpContext.User.Claims
-                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var x = _httpContextAccessor.HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier || c.Type == CustomClaimTypes.Administrator);
+            return int.Parse(x.Value);
         }
 
         public string GetUserName()
@@ -25,10 +27,5 @@ namespace Floristai.Services
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
         }
 
-        public async Task<string> GetUserClaims(int userId)
-        {
-            var response = await _userRepository.GetUserType(userId);
-            return response;
-        }
     }
 }

@@ -3,13 +3,8 @@
     [AttributeUsage(AttributeTargets.All)]
     public class LoggingAttribute : Attribute
     {
-        public LoggingEvent Event { get; set; }
-
-        public LoggingAttribute(LoggingEvent ev)
+        public LoggingAttribute()
         {
-            Event = ev;
         }
     }
-
-    public enum LoggingEvent { Create, Confirm, Complete }
 }

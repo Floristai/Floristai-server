@@ -23,7 +23,7 @@ namespace Floristai.Controllers
         }
 
         [HttpPost]
-        [Logging(LoggingEvent.Create)]
+        [Logging]
         public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
         {
             var result = await _orderService.InsertNewOrder(orderDto, 1);  //_userIdService.GetUserID()
@@ -45,7 +45,7 @@ namespace Floristai.Controllers
             return Ok(response);
         }
 
-        [Logging(LoggingEvent.Confirm)]
+        [Logging]
         [HttpPut("order/{orderId}/confirm")]
         public async Task<IActionResult> ConfirmOrder([FromRoute] int orderId)
         {
@@ -53,7 +53,7 @@ namespace Floristai.Controllers
             return Ok(response);
         }
 
-        [Logging(LoggingEvent.Complete)]
+        [Logging]
         [HttpPut("order/{orderId}/complete")]
         public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
         {

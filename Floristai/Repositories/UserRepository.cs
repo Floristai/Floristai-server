@@ -49,10 +49,11 @@ namespace Floristai.Repositories
             return response.UserId;
         }
 
-        public async Task<string> GetUserType(int id)
+        public async Task<string> GetUserType(int userId)
         {
-            var response = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
+            var response = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             return response.Type;
         }
+
     }
 }
