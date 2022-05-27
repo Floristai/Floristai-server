@@ -25,7 +25,7 @@ namespace Floristai.Controllers
         [Authorize]
         public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
         {
-            var result = await _orderService.InsertNewOrder(orderDto, _userService.getCurrentUserId());  
+            var result = await _orderService.InsertNewOrder(orderDto, _userService.GetCurrentUserId());  
             try
             { 
                 return Ok(result);
@@ -40,7 +40,7 @@ namespace Floristai.Controllers
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _orderService.GetUserOrders(_userService.getCurrentUserId());
+            var response = await _orderService.GetUserOrders(_userService.GetCurrentUserId());
             return Ok(response);
         }
 
@@ -59,7 +59,5 @@ namespace Floristai.Controllers
             var response = await _orderService.CompleteOrder(orderId);
             return Ok(response);
         }
-
-
     }
 }

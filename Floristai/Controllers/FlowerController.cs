@@ -18,7 +18,6 @@ namespace Floristai.Controllers
             _flowerService = flowerService;
         }
 
-
         [HttpGet]
         [AllowAnonymous]
         [EnableQuery]
@@ -36,14 +35,14 @@ namespace Floristai.Controllers
         {
             return Ok(flower);
         }
-        
+
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Flower flower)
         {
             return Ok(flower);
         }
-        
+
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] int flowerId)

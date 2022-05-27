@@ -76,14 +76,18 @@ namespace Floristai.Services
             }
         }
 
-
-        public async Task<UserDto> GetCurrentUser()
+        public async Task<UserDto> GetUser(int userId)
         {
-            var user = await _userRepository.GetUserById(this.getCurrentUserId());
+            var user = await _userRepository.GetUserById(userId);
             return _mapper.Map<UserDto>(user);
         }
 
-        public int getCurrentUserId()
+        public async Task<UserDto> GetCurrentUser()
+        {
+            return await GetUser(GetCurrentUserId());
+        }
+
+        public int GetCurrentUserId()
         {
             var x = _httpContextAccessor.HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier || c.Type == CustomClaimTypes.Administrator);

@@ -32,5 +32,10 @@ namespace Floristai.Services
             List<Flower> flowers = await _flowerRepository.UpdateFlowers(new List<Flower>() { flower });
             return flowers[0];
         }
+
+        public async Task<List<Flower>> GetByIds(List<int> ids)
+        {
+            return await _flowerRepository.GetByIds(ids);
+        }
     }
 }
