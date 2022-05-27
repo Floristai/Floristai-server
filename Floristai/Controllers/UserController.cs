@@ -1,4 +1,5 @@
 ﻿using Floristai.Emails;
+using Floristai.Models;
 using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,16 @@ namespace Floristai.Controllers
     public class UserController : ControllerBase{ 
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
-        public UserController(IUserService userService, IEmailService emailService)
+        private readonly EmailDetails _emailDetails;
+        public UserController(IUserService userService, IEmailService emailService, IConfiguration configuration)
         {
             _userService = userService;
             _emailService = emailService;
+            _emailDetails = new EmailDetails
+            {
+                Email = configuration.GetValue<string>("ServiceEmailAccount:Email"),
+                Password = configuration.GetValue<string>("ServiceEmailAccount:Password")
+            };
         }
 
         [HttpPost("login")]
@@ -38,7 +45,8 @@ namespace Floristai.Controllers
         public async Task<IActionResult> AttemptRegister([FromBody] UserLoginData values)
         {
             var registrationEmail = new RegistrationEmail(values.Email);
-            await _emailService.SendEmail(registrationEmail);
+
+            await _emailService.SendEmail(registrationEmail, _emailDetails);
             var registered = await _userService.RegisterUser(values.Email, values.Password);
             if (registered)
                 return Ok();

@@ -1,4 +1,5 @@
-﻿using Floristai.Emails;
+﻿using Floristai.Models;
+using Floristai.Emails;
 using System.Net;
 using System.Net.Mail;
 
@@ -6,11 +7,11 @@ namespace Floristai.Services
 {
     public class EmailService : IEmailService
     {
-        public async Task SendEmail(IEmail email)
+        public async Task SendEmail(IEmail email, EmailDetails emailDetails)
         {
-            var fromAddress = new MailAddress("farmergaren@gmail.com", "Floristai");
+            var fromAddress = new MailAddress(emailDetails.Email, "Floristai");
             var toAddress = new MailAddress(email.GetRecipientEmail());
-            const string fromPassword = "hpkmoadmtvmgafoo";
+            string fromPassword = emailDetails.Password;
 
             string body = email.GetBody();
             string subject = email.GetSubject();

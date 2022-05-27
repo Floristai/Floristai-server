@@ -15,8 +15,9 @@ namespace Floristai.Services
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly Mapper _mapper;
+        private readonly EmailDetails _emailDetails;
 
-        public OrderService(IOrderRepository orderRepository, IFlowerRepository flowerRepository, IFlowerService flowerService, IUserService userService, IEmailService emailService, Mapper mapper)
+        public OrderService(IOrderRepository orderRepository, IFlowerRepository flowerRepository, IFlowerService flowerService, IUserService userService, IEmailService emailService, Mapper mapper, IConfiguration configuration)
         {
             _orderRepository = orderRepository;
             _flowerRepository = flowerRepository;
@@ -24,6 +25,11 @@ namespace Floristai.Services
             _userService = userService;
             _emailService = emailService;
             _mapper = mapper;
+            _emailDetails = new EmailDetails
+            {
+                Email = configuration.GetValue<string>("ServiceEmailAccount:Email"),
+                Password = configuration.GetValue<string>("ServiceEmailAccount:Password")
+            };
         }
 
         public async Task<Order> ConfirmOrder(int orderId)
@@ -91,7 +97,7 @@ namespace Floristai.Services
                 };
             string userEmail = (await _userService.GetUser(order.ClientId)).Email;
             var orderEmail = new OrderEmail(flowerEmailQuery.ToList(), userEmail);
-            await _emailService.SendEmail(orderEmail);
+            await _emailService.SendEmail(orderEmail, _emailDetails);
         }
     }
 }
