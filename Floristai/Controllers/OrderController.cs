@@ -1,4 +1,5 @@
-﻿using Floristai.Entities;
+﻿using Floristai.Dto;
+using Floristai.Entities;
 using Floristai.Models;
 using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -20,20 +21,40 @@ namespace Floristai.Controllers
             _orderService = orderService;
         }
 
-        //[HttpGet("secret")]
-        //[Authorize(Policy = Policies.AdministratorOnly)]
-        //public async Task<IActionResult> GetAdminFlower()
-        //{
-        //    FlowerEntity flower = new FlowerEntity() { Name = "Administrator flower", FlowerId = 1 };
-        //    return Ok(flower);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
+        {
+            var result = await _orderService.InsertNewOrder(orderDto, 1);  //_userIdService.GetUserID()
+            try
+            { 
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }  
+        }
 
         [HttpGet("orders")]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _orderService.getUserOrders(1); //_userIdService.GetUserID()
+            var response = await _orderService.GetUserOrders(1); //_userIdService.GetUserID()
             return Ok(response);
-        } 
+        }
+
+        [HttpPut("order/{orderId}/confirm")]
+        public async Task<IActionResult> ConfirmOrder([FromRoute] int orderId)
+        {
+            var response = await _orderService.ConfirmOrder(orderId);
+            return Ok(response);
+        }
+        
+        [HttpPut("order/{orderId}/complete")]
+        public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
+        {
+            var response = await _orderService.CompleteOrder(orderId);
+            return Ok(response);
+        }
 
 
     }

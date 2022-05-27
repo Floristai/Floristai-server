@@ -8,6 +8,6 @@
 
         public int Quantity { get; set; }
 
-        public Flower flower { get; set; }
+        public int FlowerId { get; set; }
     }
 }

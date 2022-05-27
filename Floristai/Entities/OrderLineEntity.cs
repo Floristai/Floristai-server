@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Floristai.Entities
 {
@@ -13,7 +14,8 @@ namespace Floristai.Entities
 
         public int Quantity { get; set; }
 
-        public FlowerEntity Flower { get; set; }
+        [ForeignKey("FlowerId")]
+        public int FlowerId { get; set; }
 
     }
 }
