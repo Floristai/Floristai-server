@@ -1,4 +1,5 @@
-﻿using Floristai.Services;
+﻿using Floristai.Middleware;
+using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace Floristai.Controllers
         }
 
         [HttpPost("login")]
+        [Logging(LoggingEvent.Login)]
         [AllowAnonymous]
         public async Task<IActionResult> AttemptLogin([FromBody] UserLoginData values)
         {

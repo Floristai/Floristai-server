@@ -3,6 +3,7 @@ using Floristai;
 using Floristai.Dto;
 using Floristai.EFContexts;
 using Floristai.Entities;
+using Floristai.Middleware;
 using Floristai.Models;
 using Floristai.Repositories;
 using Floristai.Services;
@@ -41,6 +42,8 @@ builder.Services.AddScoped<IFlowerService, FlowerService>();
 builder.Services.AddScoped<IUserIdService, UserIdService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ILoggingRepository, LoggingRepository>();
+builder.Services.AddScoped<ILoggingService, LoggingService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(x =>
 {
@@ -82,6 +85,7 @@ if (app.Environment.IsDevelopment())
 }
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
+app.UseMiddleware<LoggingMiddleware>();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
