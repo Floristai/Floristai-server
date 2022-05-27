@@ -29,10 +29,10 @@ namespace Floristai.Services
         public async Task<bool> RegisterUser(string email, string password)
         {
             var passwordHash = GetPasswordHash(password);
-            User user = await _userRepository.GetUserByEmailAndPassword(email, password);
+            User user = await _userRepository.GetUserByEmailAndPassword(email, passwordHash);
             if (user == null)
             {
-                User toInsert = new User { Type = "Client", Email = email, Password = password }; //getPasswordHash(password)
+                User toInsert = new User { Type = "Client", Email = email, Password = passwordHash }; 
                 await _userRepository.InsertUser(toInsert);
                 return true;
             }
@@ -42,7 +42,7 @@ namespace Floristai.Services
         public async Task<string> AuthenticateUser(string email, string password)
         {
             var passwordHash = GetPasswordHash(password);
-            User user = await _userRepository.GetUserByEmailAndPassword(email, password); //getPasswordHash(password)
+            User user = await _userRepository.GetUserByEmailAndPassword(email, passwordHash); 
             if (user == null) return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
