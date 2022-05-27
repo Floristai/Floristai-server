@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Floristai.Controllers
 {
-    [Route("controller")]
+    [Route("[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
     {
