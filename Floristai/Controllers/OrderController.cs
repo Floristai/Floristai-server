@@ -39,6 +39,7 @@ namespace Floristai.Controllers
         }
 
         [HttpGet]
+        [Logging]
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
