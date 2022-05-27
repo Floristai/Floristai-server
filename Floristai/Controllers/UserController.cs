@@ -3,11 +3,13 @@ using Floristai.Models;
 using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Floristai.Controllers
 {
     public class UserLoginData
     {
+        [EmailAddress]
         public string Email { get; set; }
         public string Password { get; set; }
     }
