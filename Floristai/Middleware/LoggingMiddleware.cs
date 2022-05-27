@@ -15,7 +15,7 @@ namespace Floristai.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, ILoggingService _loggingService, IUserRepository _userRepository, IUserIdService _userIdService)
+        public async Task Invoke(HttpContext context, ILoggingService _loggingService, IUserService _userService)
         {
             await _next(context);
 
@@ -23,9 +23,11 @@ namespace Floristai.Middleware
             var attribute = endpoint?.Metadata.GetMetadata<LoggingAttribute>();
             if (attribute != null)
             {
-                var id = _userIdService.GetUserID();
-                var type = await _userRepository.GetUserType(id);
-                var registered = await _loggingService.AddNewLogging(id.ToString(), type, endpoint.ToString() );
+                var id = _userService.getCurrentUserId();
+                var user = _userService.GetCurrentUser();
+                Console.WriteLine(id);
+                Console.WriteLine(user);
+                //var registered = await _loggingService.AddNewLogging(id.ToString(), user.ToString(), endpoint.ToString() );
             }
         }
     }
