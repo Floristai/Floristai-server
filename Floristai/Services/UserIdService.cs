@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using Floristai.Models;
+using System.Security.Claims;
 
 namespace Floristai.Services
 {
@@ -12,8 +13,10 @@ namespace Floristai.Services
 
         public int GetUserID()
         {
-            return int.Parse(_httpContextAccessor.HttpContext.User.Claims
-                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var x = _httpContextAccessor.HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier || c.Type == CustomClaimTypes.Administrator);
+            return int.Parse(x.Value);
+
         }
     }
 }

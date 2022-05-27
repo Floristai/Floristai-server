@@ -29,8 +29,9 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<Flower, FlowerEntity>();
     cfg.CreateMap<OrderInsertDto, Order>();
     cfg.CreateMap<OrderLineInsertDto, OrderLine>();
-}
-    );
+    cfg.CreateMap<UserEntity, User>();
+    cfg.CreateMap<User, UserDto>();
+});
 builder.Services.AddSingleton(new Mapper(config));
 // Add services to the container.
 builder.Services.AddSwaggerGen();

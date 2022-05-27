@@ -22,9 +22,10 @@ namespace Floristai.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
         {
-            var result = await _orderService.InsertNewOrder(orderDto, 1);  //_userIdService.GetUserID()
+            var result = await _orderService.InsertNewOrder(orderDto, _userIdService.GetUserID());  
             try
             { 
                 return Ok(result);
@@ -35,21 +36,24 @@ namespace Floristai.Controllers
             }  
         }
 
-        [HttpGet("orders")]
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _orderService.GetUserOrders(1); //_userIdService.GetUserID()
+            var response = await _orderService.GetUserOrders(_userIdService.GetUserID());
             return Ok(response);
         }
 
-        [HttpPut("order/{orderId}/confirm")]
+        [Authorize(Policy = Policies.AdministratorOnly)]
+        [HttpPut("{orderId}/confirm")]
         public async Task<IActionResult> ConfirmOrder([FromRoute] int orderId)
         {
             var response = await _orderService.ConfirmOrder(orderId);
             return Ok(response);
         }
         
-        [HttpPut("order/{orderId}/complete")]
+        [Authorize(Policy = Policies.AdministratorOnly)]
+        [HttpPut("{orderId}/complete")]
         public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
         {
             var response = await _orderService.CompleteOrder(orderId);
