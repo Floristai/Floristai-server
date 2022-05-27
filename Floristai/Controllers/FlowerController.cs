@@ -21,7 +21,7 @@ namespace Floristai.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFlower()
         {
-            FlowerEntity flower = new FlowerEntity() { Name = "AA", Id = 1};
+            FlowerEntity flower = new FlowerEntity() { Name = "AA", FlowerId = 1};
             return Ok(flower);
         }
 
@@ -29,7 +29,7 @@ namespace Floristai.Controllers
         [Authorize(Policy = Policies.AdministratorOnly)]
         public async Task<IActionResult> GetAdminFlower()
         {
-            FlowerEntity flower = new FlowerEntity() { Name = "Administrator flower", Id = 1 };
+            FlowerEntity flower = new FlowerEntity() { Name = "Administrator flower", FlowerId = 1 };
             return Ok(flower);
         }
 

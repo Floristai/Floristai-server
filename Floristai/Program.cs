@@ -1,5 +1,8 @@
+using AutoMapper;
 using Floristai;
+using Floristai.Dto;
 using Floristai.EFContexts;
+using Floristai.Entities;
 using Floristai.Models;
 using Floristai.Repositories;
 using Floristai.Services;
@@ -12,14 +15,32 @@ using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version())));
+builder.Services.AddDbContext<DatabaseContext>(options => {options.EnableSensitiveDataLogging(); options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version())); });
 builder.Services.AddControllers();
+
+
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.CreateMap<OrderEntity, Order>();
+    cfg.CreateMap<Order, OrderEntity>();
+    cfg.CreateMap<OrderLine, OrderLineEntity>();
+    cfg.CreateMap<OrderLineEntity, OrderLine>();
+    cfg.CreateMap<FlowerEntity, Flower>();
+    cfg.CreateMap<Flower, FlowerEntity>();
+    cfg.CreateMap<OrderInsertDto, Order>();
+    cfg.CreateMap<OrderLineInsertDto, OrderLine>();
+}
+    );
+builder.Services.AddSingleton(new Mapper(config));
 // Add services to the container.
 builder.Services.AddSwaggerGen();
 builder.Services.TryAddSingleton<IJwtKeyHoldingService>(new JwtKeyHoldingService() { JwtTokenKey = builder.Configuration.GetValue<string>("JwtTokenKey:Key") });
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFlowerRepository, FlowerRepository>();
 builder.Services.AddScoped<IFlowerService, FlowerService>();
+builder.Services.AddScoped<IUserIdService, UserIdService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(x =>
 {

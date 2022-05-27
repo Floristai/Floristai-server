@@ -1,8 +1,11 @@
-﻿namespace Floristai.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Floristai.Entities
 {
     public class FlowerEntity
     {
-        public int Id { get; set; }
+        [Key]
+        public int FlowerId { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         public float Price { get; set; }

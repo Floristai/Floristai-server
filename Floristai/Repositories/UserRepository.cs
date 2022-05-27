@@ -42,5 +42,11 @@ namespace Floristai.Repositories
             var user = mapper.Map<User>(entity);
             return user; 
         }
+
+        public async Task<int> GetUserId(string email)
+        {
+            var response = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return response.UserId;
+        }
     }
 }
