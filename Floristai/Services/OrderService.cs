@@ -88,7 +88,7 @@ namespace Floristai.Services
                     Name = flower.Name,
                     Price = flower.Price
                 };
-            string userEmail = await _userService.GetUserEmail(order.ClientId);
+            string userEmail = (await _userService.GetUser(order.ClientId)).Email;
             var orderEmail = new OrderEmail(flowerEmailQuery.ToList(), userEmail);
             await _emailService.SendEmail(orderEmail);
         }

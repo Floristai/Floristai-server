@@ -29,8 +29,11 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<Flower, FlowerEntity>();
     cfg.CreateMap<OrderInsertDto, Order>();
     cfg.CreateMap<OrderLineInsertDto, OrderLine>();
-}
-    );
+    cfg.CreateMap<UserEntity, User>();
+    cfg.CreateMap<User, UserDto>();
+    cfg.CreateMap<MessageEntity, Message>();
+    cfg.CreateMap<Message, MessageEntity>();
+});
 builder.Services.AddSingleton(new Mapper(config));
 // Add services to the container.
 builder.Services.AddSwaggerGen();
@@ -38,9 +41,10 @@ builder.Services.TryAddSingleton<IJwtKeyHoldingService>(new JwtKeyHoldingService
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFlowerRepository, FlowerRepository>();
 builder.Services.AddScoped<IFlowerService, FlowerService>();
-builder.Services.AddScoped<IUserIdService, UserIdService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(x =>

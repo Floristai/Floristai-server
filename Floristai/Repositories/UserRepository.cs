@@ -9,10 +9,12 @@ namespace Floristai.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DatabaseContext _dbContext;
+        private readonly Mapper _mapper;
 
-        public UserRepository(DatabaseContext dbContext)
+        public UserRepository(DatabaseContext dbContext, Mapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<User> InsertUser(User user)
@@ -20,17 +22,6 @@ namespace Floristai.Repositories
             var insertedResult = _dbContext.Users.Add(new UserEntity() { Email = user.Email, Password = user.Password, Type = user.Type});
             await _dbContext.SaveChangesAsync();
             return user;
-        }
-
-        public async Task<User> GetUser(string email, string passwordHash)
-        {
-            var userExists = await _dbContext.Users.AnyAsync(u => u.Email == email && passwordHash == u.Password);
-            if (!userExists)
-            {
-                return null;
-            }
-            UserEntity userEntity = await _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
-            return MapEntityToModel(userEntity);
         }
 
         private User MapEntityToModel(UserEntity entity)
@@ -48,10 +39,28 @@ namespace Floristai.Repositories
             var response = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             return response.UserId;
         }
-        public async Task<string> GetUserEmail(int userId)
+
+        public async Task<User> GetUserByEmailAndPassword(string email, string passwordHash)
         {
-            var response = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-            return response.Email;
+            var userExists = await _dbContext.Users.AnyAsync(u => u.Email == email && passwordHash == u.Password);
+            if (!userExists)
+            {
+                return null;
+            }
+            UserEntity userEntity = await _dbContext.Users.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
+            return _mapper.Map<User>(userEntity);
+        }
+
+        public async Task<User> GetUserById(int id)
+        {
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.UserId == id);
+            return _mapper.Map<User>(user);
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
+            return _mapper.Map<User>(user);
         }
     }
 }

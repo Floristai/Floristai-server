@@ -15,9 +15,9 @@ namespace Floristai.Controllers
     public class UserController : ControllerBase{ 
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
-        public UserController(IUserService userManager, IEmailService emailService)
+        public UserController(IUserService userService, IEmailService emailService)
         {
-            _userService = userManager;
+            _userService = userService;
             _emailService = emailService;
         }
 
@@ -44,5 +44,13 @@ namespace Floristai.Controllers
             return BadRequest("Could not Register");
         }
 
+        [HttpGet("current")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var current = await _userService.GetCurrentUser();
+            return Ok(current);
+        }
+        //user gavimas
     }
 }

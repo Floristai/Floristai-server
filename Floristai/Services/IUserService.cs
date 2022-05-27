@@ -1,4 +1,5 @@
 ﻿
+using Floristai.Dto;
 using Floristai.Models;
 
 namespace Floristai.Services
@@ -7,6 +8,8 @@ namespace Floristai.Services
     {
         public Task<string> AuthenticateUser(string email, string password);
         public Task<bool> RegisterUser(string email, string password);
-        public Task<string> GetUserEmail(int userId);
+        public Task<UserDto> GetUser(int userId);
+        public Task<UserDto> GetCurrentUser();
+        public int GetCurrentUserId();
     }
 }

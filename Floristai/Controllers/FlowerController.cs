@@ -19,27 +19,35 @@ namespace Floristai.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFlower()
-        {
-            FlowerEntity flower = new FlowerEntity() { Name = "AA", FlowerId = 1};
-            return Ok(flower);
-        }
-
-        [HttpGet("secret")]
-        [Authorize(Policy = Policies.AdministratorOnly)]
-        public async Task<IActionResult> GetAdminFlower()
-        {
-            FlowerEntity flower = new FlowerEntity() { Name = "Administrator flower", FlowerId = 1 };
-            return Ok(flower);
-        }
-
-        [HttpGet("filter")]
         [AllowAnonymous]
         [EnableQuery]
         public async Task<IActionResult> GetFiltered()
         {
             var response = await _flowerService.GetAll();
             return Ok(response);
+        }
+
+        //CRUD adminui
+
+        [Authorize(Policy = Policies.AdministratorOnly)]
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Flower flower)
+        {
+            return Ok(flower);
+        }
+
+        [Authorize(Policy = Policies.AdministratorOnly)]
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] Flower flower)
+        {
+            return Ok(flower);
+        }
+
+        [Authorize(Policy = Policies.AdministratorOnly)]
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] int flowerId)
+        {
+            return Ok();
         }
     }
 }

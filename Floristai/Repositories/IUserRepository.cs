@@ -6,8 +6,8 @@ namespace Floristai.Repositories
     public interface IUserRepository
     {
         Task<User> InsertUser(User user);
-        Task<User> GetUser(string email, string password);
-        Task<int> GetUserId(string email);
-        Task<string> GetUserEmail(int userId);
+        Task<User> GetUserByEmailAndPassword(string email, string password);
+        Task<User> GetUserById(int id);
+        Task<User> GetUserByEmail(string email);
     }
 }
