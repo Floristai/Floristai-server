@@ -1,4 +1,6 @@
-﻿namespace Floristai.Services
+﻿using Floristai.Emails;
+
+namespace Floristai.Services
 {
     public interface IEmailService
     {

@@ -1,7 +1,7 @@
 ﻿using Floristai.Models;
 using Floristai.Repositories;
 
-namespace Floristai.Services
+namespace Floristai.Emails
 {
     public class OrderEmail : IEmail
     {

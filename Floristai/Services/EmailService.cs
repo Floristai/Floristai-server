@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Floristai.Emails;
+using System.Net;
 using System.Net.Mail;
 
 namespace Floristai.Services

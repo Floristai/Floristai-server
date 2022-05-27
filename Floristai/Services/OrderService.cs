@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Floristai.Dto;
+using Floristai.Emails;
 using Floristai.Models;
 using Floristai.Repositories;
 using System.Transactions;
