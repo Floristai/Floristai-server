@@ -23,7 +23,7 @@ namespace Floristai.Middleware
             var attribute = endpoint?.Metadata.GetMetadata<LoggingAttribute>();
             if (attribute != null)
             {
-                var id = _userService.getCurrentUserId();
+                var id = _userService.GetCurrentUserId();
                 var user = await _userService.GetCurrentUser();
 
                 var registered = await _loggingService.AddNewLogging(user.UserId.ToString(), user.Type, endpoint.ToString() );
