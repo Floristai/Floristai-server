@@ -14,9 +14,11 @@ namespace Floristai.Controllers
     [ApiController]
     public class UserController : ControllerBase{ 
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IEmailService _emailService;
+        public UserController(IUserService userService, IEmailService emailService)
         {
             _userService = userService;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -34,6 +36,8 @@ namespace Floristai.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AttemptRegister([FromBody] UserLoginData values)
         {
+            var registrationEmail = new RegistrationEmail(values.Email);
+            await _emailService.SendEmail(registrationEmail);
             var registered = await _userService.RegisterUser(values.Email, values.Password);
             if (registered)
                 return Ok();

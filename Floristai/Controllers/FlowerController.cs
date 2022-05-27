@@ -19,7 +19,6 @@ namespace Floristai.Controllers
             _flowerService = flowerService;
         }
 
-
         [HttpGet]
         [AllowAnonymous]
         [EnableQuery]
@@ -40,6 +39,8 @@ namespace Floristai.Controllers
         }
         
 
+
+        [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Flower flower)
         {
@@ -53,7 +54,7 @@ namespace Floristai.Controllers
                 return Conflict();
             }
         }
-        
+
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] int flowerId)

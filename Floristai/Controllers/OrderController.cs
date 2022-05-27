@@ -1,5 +1,6 @@
 ﻿using Floristai.Dto;
 using Floristai.Entities;
+using Floristai.Middleware;
 using Floristai.Models;
 using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -22,10 +23,11 @@ namespace Floristai.Controllers
         }
 
         [HttpPost]
+        [Logging]
         [Authorize]
         public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
         {
-            var result = await _orderService.InsertNewOrder(orderDto, _userService.getCurrentUserId());  
+            var result = await _orderService.InsertNewOrder(orderDto, _userService.GetCurrentUserId());  
             try
             { 
                 return Ok(result);
@@ -37,13 +39,15 @@ namespace Floristai.Controllers
         }
 
         [HttpGet]
+        [Logging]
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _orderService.GetUserOrders(_userService.getCurrentUserId());
+            var response = await _orderService.GetUserOrders(_userService.GetCurrentUserId());
             return Ok(response);
         }
 
+        [Logging]
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpPut("{orderId}/confirm")]
         public async Task<IActionResult> ConfirmOrder([FromRoute] int orderId)
@@ -51,7 +55,8 @@ namespace Floristai.Controllers
             var response = await _orderService.ConfirmOrder(orderId);
             return Ok(response);
         }
-        
+
+        [Logging]
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpPut("{orderId}/complete")]
         public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
@@ -59,7 +64,5 @@ namespace Floristai.Controllers
             var response = await _orderService.CompleteOrder(orderId);
             return Ok(response);
         }
-
-
     }
 }

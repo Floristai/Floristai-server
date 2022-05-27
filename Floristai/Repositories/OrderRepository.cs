@@ -42,11 +42,10 @@ namespace Floristai.Repositories
 
         public async Task<Order> UpdateOrderStatus(int orderId, string status)
         {
-
-            OrderEntity order = await _dbContext.Orders.SingleAsync(x => x.OrderId == orderId);
-            order.Status = status;
+            List<OrderEntity> order = await _dbContext.Orders.Where(x => x.OrderId == orderId).Include(x => x.OrderLines).ToListAsync();
+            order[0].Status = status;
             await _dbContext.SaveChangesAsync();
-            return _mapper.Map<Order>(order);
+            return _mapper.Map<Order>(order[0]);
         }
 
         public Task<Order> UpdateOrder(Order order)
