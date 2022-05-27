@@ -4,6 +4,7 @@ using Floristai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Floristai.Controllers
@@ -34,21 +35,33 @@ namespace Floristai.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Flower flower)
         {
-            return Ok(flower);
+            var response = await _flowerService.InsertFlower(flower);
+            return Ok(response);
         }
         
-        [Authorize(Policy = Policies.AdministratorOnly)]
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Flower flower)
         {
-            return Ok(flower);
+            try
+            {
+                var response = await _flowerService.UpdateFlower(flower);
+                return Ok(response);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict();
+            }
         }
         
         [Authorize(Policy = Policies.AdministratorOnly)]
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] int flowerId)
         {
-            return Ok();
+            bool succeeded = await _flowerService.DeleteFlower(flowerId);
+            if (succeeded)
+                return Ok();
+            return NotFound();
         }
     }
 }

@@ -10,5 +10,6 @@
         public string Occasion { get; set; }
         public string Description { get; set; }
         public int Quantity { get; set; }
+        public byte[] Version { get; set; }
     }
 }

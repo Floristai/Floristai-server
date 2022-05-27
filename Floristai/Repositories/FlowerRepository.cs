@@ -47,7 +47,8 @@ namespace Floristai.Repositories
 
         public async Task<List<Flower>> UpdateFlowers(List<Flower> flowers)
         {
-            flowers.ForEach(x => _dbContext.Flowers.Attach(_mapper.Map<FlowerEntity>(x)));
+            List<FlowerEntity> flowerEntities = _mapper.Map<List<Flower>, List<FlowerEntity>>(flowers);
+            flowerEntities.ForEach(flower => _dbContext.Update(flower));
             await _dbContext.SaveChangesAsync();
             return flowers;
         }
