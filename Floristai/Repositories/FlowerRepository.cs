@@ -19,8 +19,8 @@ namespace Floristai.Repositories
 
         public async Task<bool> DeleteFlower(int flowerId)
         {
-            var flowerEntity = new FlowerEntity { FlowerId = flowerId };
-            _dbContext.Flowers.Attach(flowerEntity);
+            var flowerEntity = await _dbContext.Flowers.FindAsync(flowerId);
+            if (flowerEntity == null) return false;
             _dbContext.Flowers.Remove(flowerEntity);
             await _dbContext.SaveChangesAsync();
             return true;
