@@ -25,17 +25,17 @@ namespace Floristai.Controllers
         [HttpPost]
         [Logging]
         [Authorize]
-        public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto )
+        public async Task<IActionResult> Post([FromBody] OrderInsertDto orderDto)
         {
-            var result = await _orderService.InsertNewOrder(orderDto, _userService.GetCurrentUserId());  
             try
-            { 
+            {
+                var result = await _orderService.InsertNewOrder(orderDto, _userService.GetCurrentUserId());
                 return Ok(result);
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
-            }  
+                return Conflict(ex.Message);
+            }
         }
 
         [HttpGet]
